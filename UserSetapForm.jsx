@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { TextField, Button, MenuItem } from '@mui/material';
 import { saveUserData } from './firebaseService'; // Импорт функции сохранения данных
 
@@ -28,22 +27,20 @@ const UserSetupForm = ({ onSetupComplete }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
+    // Данные пользователя для сохранения
     const userData = {
       ...physicalParams,
       ...trainingPreferences,
     };
-  
-    try {
-      await saveUserData(userData); 
-      onSetupComplete({ physicalParams, trainingPreferences });
-    } catch (error) {
-      console.error("Error saving user data:", error);
-    }
-  };  
-  UserSetupForm.propTypes = {
-    onSetupComplete: PropTypes.func.isRequired,
+
+    // Сохранение данных пользователя в Firestore
+    await saveUserData(userData);
+
+    // Продолжение выполнения логики после сохранения
+    onSetupComplete({ physicalParams, trainingPreferences });
   };
+
   return (
     <form onSubmit={handleSubmit}>
       <h2>Ввод физических параметров</h2>
