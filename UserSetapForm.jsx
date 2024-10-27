@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TextField, Button, MenuItem } from '@mui/material';
 import { saveUserData } from './firebaseService'; // Импорт функции сохранения данных
 
+// eslint-disable-next-line react/prop-types
 const UserSetupForm = ({ onSetupComplete }) => {
   const [physicalParams, setPhysicalParams] = useState({
     weight: localStorage.getItem('weight') || '',
@@ -28,17 +29,17 @@ const UserSetupForm = ({ onSetupComplete }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Данные пользователя для сохранения
     const userData = {
       ...physicalParams,
       ...trainingPreferences,
     };
 
-    // Сохранение данных пользователя в Firestore
-    await saveUserData(userData);
-
-    // Продолжение выполнения логики после сохранения
-    onSetupComplete({ physicalParams, trainingPreferences });
+    try {
+      await saveUserData(userData); 
+      onSetupComplete({ physicalParams, trainingPreferences });
+    } catch (error) {
+      console.error("Error saving user data:", error);
+    }
   };
 
   return (
