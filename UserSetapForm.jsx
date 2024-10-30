@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { TextField, Button, MenuItem } from '@mui/material';
 import { saveUserData } from './firebaseService'; // Импорт функции сохранения данных
 
-// eslint-disable-next-line react/prop-types
 const UserSetupForm = ({ onSetupComplete }) => {
   const [physicalParams, setPhysicalParams] = useState({
     weight: localStorage.getItem('weight') || '',
