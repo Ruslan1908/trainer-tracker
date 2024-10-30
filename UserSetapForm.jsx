@@ -28,17 +28,17 @@ const UserSetupForm = ({ onSetupComplete }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Данные пользователя для сохранения
     const userData = {
       ...physicalParams,
       ...trainingPreferences,
     };
 
-    // Сохранение данных пользователя в Firestore
-    await saveUserData(userData);
-
-    // Продолжение выполнения логики после сохранения
-    onSetupComplete({ physicalParams, trainingPreferences });
+    try {
+      await saveUserData(userData); 
+      onSetupComplete({ physicalParams, trainingPreferences });
+    } catch (error) {
+      console.error("Error saving user data:", error);
+    }
   };
 
   return (
