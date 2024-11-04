@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Button, Checkbox, Typography } from '@mui/material';
 
 const generateWorkoutPlan = (sessionsPerWeek) => {
@@ -9,7 +10,7 @@ const generateWorkoutPlan = (sessionsPerWeek) => {
     ['Спина'],
     ['Ноги']
   ];
-
+  
   const workoutPlan = [];
   for (let i = 0; i < sessionsPerWeek; i++) {
     workoutPlan.push({ day: `День ${i + 1}`, muscles: muscleGroups[i % muscleGroups.length], completed: false });
@@ -37,7 +38,10 @@ const WorkoutScheduler = ({ sessionsPerWeek }) => {
     const newPlan = generateWorkoutPlan(sessionsPerWeek);
     setWorkoutPlan(newPlan);
   };
-
+  WorkoutScheduler.propTypes = {
+    sessionsPerWeek: PropTypes.number.isRequired,
+  };
+  
   return (
     <div>
       <Typography variant="h4">Ваши тренировки</Typography>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TextField, Button, MenuItem } from '@mui/material';
 import { saveUserData } from './firebaseService'; // Импорт функции сохранения данных
 
+
 const UserSetupForm = ({ onSetupComplete }) => {
   const [physicalParams, setPhysicalParams] = useState({
     weight: localStorage.getItem('weight') || '',

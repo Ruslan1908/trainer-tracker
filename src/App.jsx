@@ -5,8 +5,7 @@ import GymMap from './GymMap';
 import { Container, CssBaseline } from '@mui/material';
 
 function App() {
-  const [userData, setUserData] = useState(null);
-
+  const [userData, setUserData] = useState(null);  
   const handleSetupComplete = (data) => {
     setUserData(data);
   };
