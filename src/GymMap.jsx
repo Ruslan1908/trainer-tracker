@@ -24,4 +24,5 @@ const GymMap = () => {
   );
 };
 
-export default GymMap;
+export { GymMap };
+
