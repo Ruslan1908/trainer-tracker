@@ -5,30 +5,37 @@ import { saveUserData } from './firebaseService';
 
 const getFromLocalStorage = (key) => localStorage.getItem(key);
 
-const initializePhysicalParams = () => ({
+const getInitialPhysicalParams = () => ({
   weight: getFromLocalStorage('weight') || '',
   height: getFromLocalStorage('height') || '',
   age: getFromLocalStorage('age') || '',
 });
 
-const initializeTrainingPreferences = () => ({
+const getInitialTrainingPreferences = () => ({
   location: getFromLocalStorage('location') || 'gym',
   sessionsPerWeek: getFromLocalStorage('sessionsPerWeek') || 3,
 });
 
-const UserSetupForm = ({ onSetupComplete }) => {
-  const [physicalParams, setPhysicalParams] = useState(initializePhysicalParams);
-  const [location, setLocation] = useState(initializeTrainingPreferences().location);
-  const [sessionsPerWeek, setSessionsPerWeek] = useState(initializeTrainingPreferences().sessionsPerWeek);
+const saveUserDataToLocalStorage = (userData) => {
+  Object.entries(userData).forEach(([key, value]) => {
+    localStorage.setItem(key, value);
+  });
+};
 
-  const handleInputChange = (name, value) => {
+export const UserSetupForm = ({ onSetupComplete }) => {
+  const initialTrainingPreferences = getInitialTrainingPreferences();
+  const [physicalParams, setPhysicalParams] = useState(getInitialPhysicalParams);
+  const [location, setLocation] = useState(initialTrainingPreferences.location);
+  const [sessionsPerWeek, setSessionsPerWeek] = useState(initialTrainingPreferences.sessionsPerWeek);
+
+  const handlePhysicalParamChange = (name, value) => {
     setPhysicalParams((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
-  const handlePreferencesChange = (name, value) => {
+  const handleTrainingPreferenceChange = (name, value) => {
     if (name === 'location') {
       setLocation(value);
     } else if (name === 'sessionsPerWeek') {
@@ -47,10 +54,7 @@ const UserSetupForm = ({ onSetupComplete }) => {
 
     try {
       await saveUserData(userData);
-      
-      Object.entries(userData).forEach(([key, value]) => {
-        localStorage.setItem(key, value);
-      });
+      saveUserDataToLocalStorage(userData);
 
       onSetupComplete({ physicalParams, trainingPreferences: { location, sessionsPerWeek } });
     } catch (error) {
@@ -66,7 +70,7 @@ const UserSetupForm = ({ onSetupComplete }) => {
         type="number"
         name="weight"
         value={physicalParams.weight}
-        onChange={(e) => handleInputChange('weight', e.target.value)}
+        onChange={(e) => handlePhysicalParamChange('weight', e.target.value)}
         fullWidth
         margin="normal"
         required
@@ -76,7 +80,7 @@ const UserSetupForm = ({ onSetupComplete }) => {
         type="number"
         name="height"
         value={physicalParams.height}
-        onChange={(e) => handleInputChange('height', e.target.value)}
+        onChange={(e) => handlePhysicalParamChange('height', e.target.value)}
         fullWidth
         margin="normal"
         required
@@ -86,7 +90,7 @@ const UserSetupForm = ({ onSetupComplete }) => {
         type="number"
         name="age"
         value={physicalParams.age}
-        onChange={(e) => handleInputChange('age', e.target.value)}
+        onChange={(e) => handlePhysicalParamChange('age', e.target.value)}
         fullWidth
         margin="normal"
         required
@@ -96,7 +100,7 @@ const UserSetupForm = ({ onSetupComplete }) => {
         label="Где тренироваться"
         name="location"
         value={location}
-        onChange={(e) => handlePreferencesChange('location', e.target.value)}
+        onChange={(e) => handleTrainingPreferenceChange('location', e.target.value)}
         fullWidth
         margin="normal"
         required
@@ -110,7 +114,7 @@ const UserSetupForm = ({ onSetupComplete }) => {
         type="number"
         name="sessionsPerWeek"
         value={sessionsPerWeek}
-        onChange={(e) => handlePreferencesChange('sessionsPerWeek', e.target.value)}
+        onChange={(e) => handleTrainingPreferenceChange('sessionsPerWeek', e.target.value)}
         fullWidth
         margin="normal"
         required
@@ -121,5 +125,3 @@ const UserSetupForm = ({ onSetupComplete }) => {
     </form>
   );
 };
-
-export { UserSetupForm };
