@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { Container, CssBaseline } from '@mui/material';
 
-import { UserSetupForm } from './UserSetupForm.jsx';
-import { WorkoutScheduler } from './WorkoutScheduler.jsx';
-import { GymMap } from './GymMap.jsx';
+import { UserSetupForm } from './UserSetupForm';
+import { WorkoutScheduler } from './WorkoutScheduler';
+import { GymMap } from './GymMap';
 
-const App = () => {
+export const App = () => {
   const [userData, setUserData] = useState(null);
 
   const handleSetupComplete = (data) => {
     setUserData(data);
   };
-  
+
   return (
     <Container maxWidth="sm">
       <CssBaseline />
@@ -26,5 +26,3 @@ const App = () => {
     </Container>
   );
 };
-
-export { App };
