@@ -10,7 +10,7 @@ const defaultCenter = {
   lat: 40.730610, lng: -73.935242 // Примерные координаты
 };
 
-const GymMap = () => {
+export const GymMap = () => {
   return (
     <LoadScript googleMapsApiKey='ТВОЙ_API_КЛЮЧ'>
       <GoogleMap
@@ -23,5 +23,3 @@ const GymMap = () => {
     </LoadScript>
   );
 };
-
-export default GymMap;

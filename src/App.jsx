@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import UserSetupForm from './UserSetupForm';
-import WorkoutScheduler from './WorkoutScheduler';
-import GymMap from './GymMap';
 import { Container, CssBaseline } from '@mui/material';
 
-function App() {
-  const [userData, setUserData] = useState(null);  
+import { UserSetupForm } from './UserSetupForm';
+import { WorkoutScheduler } from './WorkoutScheduler';
+import { GymMap } from './GymMap';
+
+export const App = () => {
+  const [userData, setUserData] = useState(null);
+
   const handleSetupComplete = (data) => {
     setUserData(data);
   };
@@ -23,6 +25,4 @@ function App() {
       )}
     </Container>
   );
-}
-
-export default App;
+};

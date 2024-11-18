@@ -1,44 +1,56 @@
 import React, { useState } from 'react';
 import { TextField, Button, MenuItem } from '@mui/material';
-import { saveUserData } from './firebaseService'; // Импорт функции сохранения данных
 
+import { saveUserData } from './firebaseService';
 
-const UserSetupForm = ({ onSetupComplete }) => {
-  const [physicalParams, setPhysicalParams] = useState({
-    weight: localStorage.getItem('weight') || '',
-    height: localStorage.getItem('height') || '',
-    age: localStorage.getItem('age') || ''
+const initialPhysicalParams = {
+  weight: localStorage.getItem('weight') || '',
+  height: localStorage.getItem('height') || '',
+  age: localStorage.getItem('age') || '',
+};
+
+const initialTrainingPreferences = {
+  location: localStorage.getItem('location') || 'gym',
+  sessionsPerWeek: Number(localStorage.getItem('sessionsPerWeek')) || 3,
+};
+
+const saveUserDataToLocalStorage = (userData) => {
+  Object.entries(userData).forEach(([key, value]) => {
+    localStorage.setItem(key, value);
   });
-  const [trainingPreferences, setTrainingPreferences] = useState({
-    location: localStorage.getItem('location') || 'gym',
-    sessionsPerWeek: localStorage.getItem('sessionsPerWeek') || 3
-  });
+};
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setPhysicalParams({ ...physicalParams, [name]: value });
-    localStorage.setItem(name, value);
+export const UserSetupForm = ({ onSetupComplete }) => {
+  const [physicalParams, setPhysicalParams] = useState(initialPhysicalParams);
+  const [location, setLocation] = useState(initialTrainingPreferences.location);
+  const [sessionsPerWeek, setSessionsPerWeek] = useState(initialTrainingPreferences.sessionsPerWeek);
+
+  const handlePhysicalParamChange = (name, value) => {
+    setPhysicalParams((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handlePreferencesChange = (e) => {
-    const { name, value } = e.target;
-    setTrainingPreferences({ ...trainingPreferences, [name]: value });
-    localStorage.setItem(name, value);
-  };
+  const handleLocationChange = (value) => setLocation(value);
+
+  const handleSessionsPerWeekChange = (value) => setSessionsPerWeek(value);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const userData = {
       ...physicalParams,
-      ...trainingPreferences,
+      location,
+      sessionsPerWeek,
     };
 
     try {
-      await saveUserData(userData); 
-      onSetupComplete({ physicalParams, trainingPreferences });
+      await saveUserData(userData);
+      saveUserDataToLocalStorage(userData);
+      onSetupComplete({ physicalParams, trainingPreferences: { location, sessionsPerWeek } });
     } catch (error) {
-      console.error("Error saving user data:", error);
+      console.error('Error saving user data:', error);
     }
   };
 
@@ -50,7 +62,7 @@ const UserSetupForm = ({ onSetupComplete }) => {
         type="number"
         name="weight"
         value={physicalParams.weight}
-        onChange={handleInputChange}
+        onChange={(e) => handlePhysicalParamChange('weight', e.target.value)}
         fullWidth
         margin="normal"
         required
@@ -60,7 +72,7 @@ const UserSetupForm = ({ onSetupComplete }) => {
         type="number"
         name="height"
         value={physicalParams.height}
-        onChange={handleInputChange}
+        onChange={(e) => handlePhysicalParamChange('height', e.target.value)}
         fullWidth
         margin="normal"
         required
@@ -70,7 +82,7 @@ const UserSetupForm = ({ onSetupComplete }) => {
         type="number"
         name="age"
         value={physicalParams.age}
-        onChange={handleInputChange}
+        onChange={(e) => handlePhysicalParamChange('age', e.target.value)}
         fullWidth
         margin="normal"
         required
@@ -79,8 +91,8 @@ const UserSetupForm = ({ onSetupComplete }) => {
         select
         label="Где тренироваться"
         name="location"
-        value={trainingPreferences.location}
-        onChange={handlePreferencesChange}
+        value={location}
+        onChange={(e) => handleLocationChange(e.target.value)}
         fullWidth
         margin="normal"
         required
@@ -93,8 +105,8 @@ const UserSetupForm = ({ onSetupComplete }) => {
         label="Количество тренировок в неделю"
         type="number"
         name="sessionsPerWeek"
-        value={trainingPreferences.sessionsPerWeek}
-        onChange={handlePreferencesChange}
+        value={sessionsPerWeek}
+        onChange={(e) => handleSessionsPerWeekChange(e.target.value)}
         fullWidth
         margin="normal"
         required
@@ -105,5 +117,3 @@ const UserSetupForm = ({ onSetupComplete }) => {
     </form>
   );
 };
-
-export default UserSetupForm;
