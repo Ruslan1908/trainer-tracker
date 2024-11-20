@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import { Button, Checkbox, Typography } from '@mui/material';
 
 const generateWorkoutPlan = (sessionsPerWeek) => {
@@ -10,23 +9,31 @@ const generateWorkoutPlan = (sessionsPerWeek) => {
     ['Спина'],
     ['Ноги']
   ];
-  
+
   const workoutPlan = [];
   for (let i = 0; i < sessionsPerWeek; i++) {
-    workoutPlan.push({ day: `День ${i + 1}`, muscles: muscleGroups[i % muscleGroups.length], completed: false });
+    workoutPlan.push({
+      day: `День ${i + 1}`, // Название дня тренировки
+      muscles: muscleGroups[i % muscleGroups.length], // Определяем мышечные группы с помощью остатка от деления
+      completed: false // Статус выполнения упражнения
+    });
   }
   return workoutPlan;
 };
 
-const WorkoutScheduler = ({ sessionsPerWeek }) => {
-  const [workoutPlan, setWorkoutPlan] = useState(() => {
-    const savedPlan = localStorage.getItem('workoutPlan');
-    return savedPlan ? JSON.parse(savedPlan) : generateWorkoutPlan(sessionsPerWeek);
-  });
 
-  useEffect(() => {
-    localStorage.setItem('workoutPlan', JSON.stringify(workoutPlan));
-  }, [workoutPlan]);
+const getInitialWorkoutPlan = (sessionsPerWeek) => {
+  const savedPlan = localStorage.getItem('workoutPlan');
+  return savedPlan ? JSON.parse(savedPlan) : generateWorkoutPlan(sessionsPerWeek);
+};
+
+export const WorkoutScheduler = ({ sessionsPerWeek }) => {
+  const [workoutPlan, setWorkoutPlanState] = useState(() => getInitialWorkoutPlan(sessionsPerWeek));
+
+  const setWorkoutPlan = (newPlan) => {
+    setWorkoutPlanState(newPlan);
+    localStorage.setItem('workoutPlan', JSON.stringify(newPlan));
+  };
 
   const markAsDone = (index) => {
     const updatedPlan = [...workoutPlan];
@@ -38,10 +45,7 @@ const WorkoutScheduler = ({ sessionsPerWeek }) => {
     const newPlan = generateWorkoutPlan(sessionsPerWeek);
     setWorkoutPlan(newPlan);
   };
-  WorkoutScheduler.propTypes = {
-    sessionsPerWeek: PropTypes.number.isRequired,
-  };
-  
+
   return (
     <div>
       <Typography variant="h4">Ваши тренировки</Typography>
@@ -63,5 +67,3 @@ const WorkoutScheduler = ({ sessionsPerWeek }) => {
     </div>
   );
 };
-
-export default WorkoutScheduler;
