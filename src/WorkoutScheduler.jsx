@@ -14,13 +14,12 @@ const generateWorkoutPlan = (sessionsPerWeek) => {
   for (let i = 0; i < sessionsPerWeek; i++) {
     workoutPlan.push({
       day: `День ${i + 1}`, // Название дня тренировки
-      muscles: muscleGroups[i % muscleGroups.length], // Определяем мышечные группы с помощью остатка от деления
+      muscles: muscleGroups[i % muscleGroups.length], // Остаток от деления i на длину массива, он позволяет "зациклить" группы мышц, если дней тренировок больше, чем доступных групп
       completed: false // Статус выполнения упражнения
     });
   }
   return workoutPlan;
 };
-
 
 const getInitialWorkoutPlan = (sessionsPerWeek) => {
   const savedPlan = localStorage.getItem('workoutPlan');
@@ -28,22 +27,22 @@ const getInitialWorkoutPlan = (sessionsPerWeek) => {
 };
 
 export const WorkoutScheduler = ({ sessionsPerWeek }) => {
-  const [workoutPlan, setWorkoutPlanState] = useState(() => getInitialWorkoutPlan(sessionsPerWeek));
+  const [workoutPlan, setWorkoutPlan] = useState(() => getInitialWorkoutPlan(sessionsPerWeek));
 
-  const setWorkoutPlan = (newPlan) => {
-    setWorkoutPlanState(newPlan);
+  const updateWorkoutPlan = (newPlan) => {
+    setWorkoutPlan(newPlan);
     localStorage.setItem('workoutPlan', JSON.stringify(newPlan));
   };
 
   const markAsDone = (index) => {
     const updatedPlan = [...workoutPlan];
     updatedPlan[index].completed = !updatedPlan[index].completed;
-    setWorkoutPlan(updatedPlan);
+    updateWorkoutPlan(updatedPlan);
   };
 
   const resetPlan = () => {
     const newPlan = generateWorkoutPlan(sessionsPerWeek);
-    setWorkoutPlan(newPlan);
+    updateWorkoutPlan(newPlan);
   };
 
   return (
