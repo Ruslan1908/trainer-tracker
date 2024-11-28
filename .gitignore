@@ -21,3 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Skip preflight check
+SKIP_PREFLIGHT_CHECK=true
