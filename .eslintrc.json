@@ -5,7 +5,10 @@
   },
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:react/jsx-runtime"  
   ],
   "parserOptions": {
     "ecmaFeatures": {
@@ -15,14 +18,29 @@
     "sourceType": "module"
   },
   "plugins": [
-    "react"
+    "react",
+    "import"
   ],
   "rules": {
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
+        "newlines-between": "always"
+      }
+    ],
+    "import/no-unresolved": "off",  
+    "react/react-in-jsx-scope": "off"  
   },
   "settings": {
     "react": {
-      "version": "detect"
+      "version": "detect"  
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]  
+      }
     }
   }
 }
