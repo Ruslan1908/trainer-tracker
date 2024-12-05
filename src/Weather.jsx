@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'; 
+import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
-import axios from 'axios';
+
+import { fetchWeatherData } from './utils/weather'; 
 
 const WeatherContainer = styled.div`
   padding: 20px;
@@ -24,17 +25,14 @@ export const Weather = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const lat = 33.44; 
-  const lon = -94.04; 
-  const apiKey = '5fdd93652c06870916b3a6ccf6b88aca'; 
+  const lat = 33.44;  // Пример координат
+  const lon = -94.04;
 
   useEffect(() => {
     const fetchWeather = async () => {
       try {
-        const response = await axios.get(
-          `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`  // Добавлен параметр units=metric
-        );
-        setWeatherData(response.data);
+        const data = await fetchWeatherData(lat, lon);
+        setWeatherData(data);
         setLoading(false);
       } catch (error) {
         setError('Failed to fetch weather data');
@@ -42,7 +40,7 @@ export const Weather = () => {
       }
     };
     fetchWeather();
-  }, [lat, lon, apiKey]);
+  }, [lat, lon]);
 
   if (loading) return <WeatherContainer>Загрузка...</WeatherContainer>;
   if (error) return <WeatherContainer>{error}</WeatherContainer>;
@@ -50,7 +48,7 @@ export const Weather = () => {
   return (
     <WeatherContainer>
       <WeatherTitle>Прогноз погоды</WeatherTitle>
-      <WeatherInfo>Температура: {weatherData.current.temp}°C</WeatherInfo>  {/* Температура теперь в Цельсиях */}
+      <WeatherInfo>Температура: {weatherData.current.temp}°C</WeatherInfo>
       <WeatherInfo>Влажность: {weatherData.current.humidity}%</WeatherInfo>
       <WeatherInfo>{weatherData.current.weather[0].description}</WeatherInfo>
     </WeatherContainer>
