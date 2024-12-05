@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { TextField, Button, MenuItem } from '@mui/material';
 
 import { saveUserData } from './firebaseService';
@@ -11,7 +11,7 @@ const initialPhysicalParams = {
 
 const initialTrainingPreferences = {
   location: localStorage.getItem('location') || 'gym',
-  sessionsPerWeek: Number(localStorage.getItem('sessionsPerWeek')) || 3,
+  sessionsPerWeek: Number(localStorage.getItem('sessionsPerWeek')) ?? 3,
 };
 
 const saveUserDataToLocalStorage = (userData) => {
