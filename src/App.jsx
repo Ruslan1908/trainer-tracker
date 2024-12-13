@@ -1,10 +1,10 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { styled } from 'styled-components';
 
-import { Header } from './HeaderComponent';
-import { UserSetupForm } from './UserSetupForm';
-import { WorkoutScheduler } from './WorkoutScheduler';
-import { Weather } from './Weather';
+import { Header } from './components/HeaderComponent';
+import { UserSetupForm } from './components/UserSetupForm';
+import { WorkoutScheduler } from './components/WorkoutScheduler';
+import { Weather } from './components/Weather';
 
 const MainContent = styled.main`
   display: flex;
