@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { styled } from 'styled-components';
 
-import { Header } from './Header';
+import { Header } from './HeaderComponent';
 import { UserSetupForm } from './UserSetupForm';
 import { WorkoutScheduler } from './WorkoutScheduler';
 import { Weather } from './Weather';
