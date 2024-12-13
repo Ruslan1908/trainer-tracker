@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { TextField, Button, MenuItem } from '@mui/material';
 
-import { saveUserData } from './firebaseService';
+import { saveUserData } from './services/firebaseService';
 
 const initialPhysicalParams = {
   weight: localStorage.getItem('weight') || '',
