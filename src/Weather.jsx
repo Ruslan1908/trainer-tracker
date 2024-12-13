@@ -20,18 +20,17 @@ const WeatherInfo = styled.p`
   font-size: 18px;
 `;
 
+const DEFAULT_CITY = "Wroclaw"; // Город по умолчанию
+
 export const Weather = () => {
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const lat = 33.44;  // Пример координат
-  const lon = -94.04;
-
   useEffect(() => {
     const fetchWeather = async () => {
       try {
-        const data = await fetchWeatherData(lat, lon);
+        const data = await fetchWeatherData(DEFAULT_CITY);
         setWeatherData(data);
         setLoading(false);
       } catch (error) {
@@ -40,7 +39,7 @@ export const Weather = () => {
       }
     };
     fetchWeather();
-  }, [lat, lon]);
+  }, []);
 
   if (loading) return <WeatherContainer>Загрузка...</WeatherContainer>;
   if (error) return <WeatherContainer>{error}</WeatherContainer>;
@@ -54,3 +53,4 @@ export const Weather = () => {
     </WeatherContainer>
   );
 };
+
