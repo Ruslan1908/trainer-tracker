@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
-import { fetchWeatherData } from './utils_weather'; 
+import { fetchWeatherData } from './utils/utils_weather'; 
 
 const WeatherContainer = styled.div`
   padding: 20px;
