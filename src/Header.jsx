@@ -1,29 +1,51 @@
-import { Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { styled } from 'styled-components';
 
-const HeaderContainer = styled.header`
+import { Header } from './HeaderComponent';
+import { UserSetupForm } from './UserSetupForm';
+import { WorkoutScheduler } from './WorkoutScheduler';
+import { Weather } from './Weather';
+
+const MainContent = styled.main`
   display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  background-color: #3f51b5;
+  justify-content: center;
+  align-items: center;
+
+  min-height: 100vh;
+  padding-top: 60px;
 `;
 
-const NavLink = styled(Link)`
-  color: white;
-  text-decoration: none;
-  font-size: 18px;
-  margin-right: 10px;
-  
-  &:hover {
-    text-decoration: underline;
-  }
-`;
+const Layout = ({ children }) => (
+  <div>
+    <Header />
+    <MainContent>{children}</MainContent>
+  </div>
+);
 
-export const Header = () => {
+export const App = () => {
+  const [setupComplete, setSetupComplete] = useState(false);
+
+  const handleSetupComplete = () => {
+    setSetupComplete(true);
+  };
+
   return (
-    <HeaderContainer>
-      <NavLink to="/">Home</NavLink>
-      <NavLink to="/weather">Weather</NavLink>
-    </HeaderContainer>
+    <Router>
+      <Layout>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              !setupComplete ? (
+                <UserSetupForm onSetupComplete={handleSetupComplete} />
+              ) : (
+                <WorkoutScheduler />
+              )
+            }
+          />
+          <Route path="/weather" element={<Weather />} />
+        </Routes>
+      </Layout>
+    </Router>
   );
 };
