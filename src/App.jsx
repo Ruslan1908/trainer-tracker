@@ -1,55 +1,14 @@
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useState } from 'react';
-import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import { styled } from 'styled-components';
 
+import { ROUTES } from './routes';
 import { UserSetupForm } from './UserSetupForm';
 import { WorkoutScheduler } from './WorkoutScheduler';
-import { Weather } from './Weather';  
-import { Layout } from './Layout';
+import { Weather } from './Weather';
+import { Header } from './HeaderComponent'; 
 
-const Header = styled.header`
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background-color: #4682b4;
-  color: white;
-  padding: 10px 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-`;
-
-const Nav = styled.nav`
-  display: flex;
-  gap: 20px;
-`;
-
-const NavLink = styled(Link)`
-  color: white;
-  text-decoration: none;
-  font-size: 18px;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const MainContent = styled.main`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding-top: 60px;  
-`;
-
-const WeatherWithLayout = () => (
-  <Layout>
-    <Weather />
-  </Layout>
-);
-
-export const App = () => {
+export function App() {
   const [setupComplete, setSetupComplete] = useState(false);
 
   const handleSetupComplete = () => {
@@ -59,19 +18,23 @@ export const App = () => {
   return (
     <Router>
       <div>
-        <Header>
-          <Nav>
-            <NavLink to="/">Домой</NavLink>
-            <NavLink to="/weather">Погода</NavLink>
-          </Nav>
-        </Header>
-        <MainContent>
+        <Header />
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', paddingTop: '20px' }}>
           <Routes>
-            <Route path="/" element={!setupComplete ? <UserSetupForm onSetupComplete={handleSetupComplete} /> : <WorkoutScheduler />} />
-            <Route path="/weather" element={<WeatherWithLayout />} />
+            <Route
+              path={ROUTES.HOME}
+              element={
+                !setupComplete ? (
+                  <UserSetupForm onSetupComplete={handleSetupComplete} />
+                ) : (
+                  <WorkoutScheduler />
+                )
+              }
+            />
+            <Route path={ROUTES.Weather} element={<Weather />} />
           </Routes>
-        </MainContent>
+        </div>
       </div>
     </Router>
   );
-};
+}
