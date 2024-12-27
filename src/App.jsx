@@ -1,40 +1,42 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { useState } from 'react';
-import { styled } from 'styled-components';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
+import { Layout } from './components/Layout';
 import { ROUTES } from './routes';
-import { UserSetupForm } from './UserSetupForm';
-import { WorkoutScheduler } from './WorkoutScheduler';
-import { Weather } from './Weather';
-import { Header } from './HeaderComponent'; 
+import { UserSetupForm } from './components/UserSetupForm';
+import { WorkoutScheduler } from './components/WorkoutScheduler';
+import { Weather } from './components/Weather';
 
-export function App() {
-  const [setupComplete, setSetupComplete] = useState(false);
+const Page1 = () => (
+  <Layout>
+    <UserSetupForm onSetupComplete={() => {}} />
+  </Layout>
+);
 
-  const handleSetupComplete = () => {
-    setSetupComplete(true);
-  };
+const Page2 = () => (
+  <Layout>
+    <WorkoutScheduler />
+  </Layout>
+);
+
+const WeatherPage = () => (
+  <div>
+    <Weather />
+  </div>
+);
+
+export const App = () => {
+  const [setupComplete] = useState(false);
 
   return (
     <Router>
-      <div>
-        <Header />
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', paddingTop: '20px' }}>
-          <Routes>
-            <Route
-              path={ROUTES.HOME}
-              element={
-                !setupComplete ? (
-                  <UserSetupForm onSetupComplete={handleSetupComplete} />
-                ) : (
-                  <WorkoutScheduler />
-                )
-              }
-            />
-            <Route path={ROUTES.Weather} element={<Weather />} />
-          </Routes>
-        </div>
-      </div>
+      <Routes>
+        <Route
+          path={ROUTES.HOME}
+          element={!setupComplete ? <Page1 /> : <Page2 />}
+        />
+        <Route path={ROUTES.Weather} element={<WeatherPage />} />
+      </Routes>
     </Router>
   );
-}
+};
