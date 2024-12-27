@@ -1,7 +1,7 @@
-//это HeaderComponent
-
 import { Link } from 'react-router-dom';
 import { styled } from 'styled-components';
+
+import { ROUTES } from './routes';
 
 const HeaderContainer = styled.header`
   background-color: #282c34;
@@ -38,19 +38,19 @@ const NavItem = styled.li`
   }
 `;
 
-export function Header() {
+export const Header = () => {
   return (
     <HeaderContainer>
       <Nav>
         <NavList>
           <NavItem>
-            <Link to="/">Home</Link>
+            <Link to={ROUTES.HOME}>Home</Link>
           </NavItem>
           <NavItem>
-            <Link to="/weather">Weather</Link>
+            <Link to={ROUTES.Weather}>Weather</Link>
           </NavItem>
         </NavList>
       </Nav>
     </HeaderContainer>
   );
-}
+};
