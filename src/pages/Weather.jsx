@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 
 import { fetchWeatherData } from './utils/utils_weather'; 
-
+import { Layout } from './components/Layout'; 
 const WeatherContainer = styled.div`
   padding: 20px;
   background-color: #f0f0f0;
@@ -45,12 +45,13 @@ export const Weather = () => {
   if (error) return <WeatherContainer>{error}</WeatherContainer>;
 
   return (
-    <WeatherContainer>
-      <WeatherTitle>Прогноз погоды</WeatherTitle>
-      <WeatherInfo>Температура: {weatherData.current.temp}°C</WeatherInfo>
-      <WeatherInfo>Влажность: {weatherData.current.humidity}%</WeatherInfo>
-      <WeatherInfo>{weatherData.current.weather[0].description}</WeatherInfo>
-    </WeatherContainer>
+    <Layout> {/* Layout */}
+      <WeatherContainer>
+        <WeatherTitle>Прогноз погоды</WeatherTitle>
+        <WeatherInfo>Температура: {weatherData.current.temp}°C</WeatherInfo>
+        <WeatherInfo>Влажность: {weatherData.current.humidity}%</WeatherInfo>
+        <WeatherInfo>{weatherData.current.weather[0].description}</WeatherInfo>
+      </WeatherContainer>
+    </Layout>
   );
 };
-
