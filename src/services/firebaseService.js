@@ -1,4 +1,3 @@
-// firebaseService.js
 import { db } from './firebase'; // Импорт Firestore из файла firebase.js
 import { doc, setDoc } from 'firebase/firestore';
 

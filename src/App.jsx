@@ -1,28 +1,42 @@
-import React, { useState } from 'react';
-import { Container, CssBaseline } from '@mui/material';
+import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import { UserSetupForm } from './UserSetupForm';
-import { WorkoutScheduler } from './WorkoutScheduler';
-import { GymMap } from './GymMap';
+import { Layout } from './components/Layout';
+import { ROUTES } from './routes';
+import { UserSetupForm } from './components/UserSetupForm';
+import { WorkoutScheduler } from './components/WorkoutScheduler';
+import { Weather } from './components/Weather';
+
+const Page1 = () => (
+  <Layout>
+    <UserSetupForm onSetupComplete={() => {}} />
+  </Layout>
+);
+
+const Page2 = () => (
+  <Layout>
+    <WorkoutScheduler />
+  </Layout>
+);
+
+const WeatherPage = () => (
+  <div>
+    <Weather />
+  </div>
+);
 
 export const App = () => {
-  const [userData, setUserData] = useState(null);
-
-  const handleSetupComplete = (data) => {
-    setUserData(data);
-  };
+  const [setupComplete] = useState(false);
 
   return (
-    <Container maxWidth="sm">
-      <CssBaseline />
-      {!userData ? (
-        <UserSetupForm onSetupComplete={handleSetupComplete} />
-      ) : (
-        <>
-          <WorkoutScheduler sessionsPerWeek={userData.trainingPreferences.sessionsPerWeek} />
-          {userData.trainingPreferences.location === 'gym' && <GymMap />}
-        </>
-      )}
-    </Container>
+    <Router>
+      <Routes>
+        <Route
+          path={ROUTES.HOME}
+          element={!setupComplete ? <Page1 /> : <Page2 />}
+        />
+        <Route path={ROUTES.Weather} element={<WeatherPage />} />
+      </Routes>
+    </Router>
   );
 };
